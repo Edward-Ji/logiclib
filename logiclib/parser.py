@@ -4,13 +4,16 @@ This module provides utilities to parse strings into formula objects.
 
 from typing import List
 from pyparsing import (
-    Char, OpAssoc, Word, alphas, alphanums, delimited_list, infix_notation,
-    one_of
+    Char, OpAssoc, ParserElement, Word, alphas, alphanums, delimited_list,
+    infix_notation, one_of
 )
 from logiclib.formula import (
     Formula, Predicate, Universal, Existential, Negation, Conjunction,
     Disjunction, Implication, BiImplication
 )
+
+
+ParserElement.enable_left_recursion()
 
 
 def predicate_action(_s, _loc, toks: List[str]) -> Predicate:
