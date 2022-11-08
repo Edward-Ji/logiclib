@@ -1,5 +1,3 @@
-# pylint: disable=missing-docstring
-
 from logiclib.formula import Formula
 from logiclib.parser import parse_formula
 

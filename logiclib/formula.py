@@ -1,4 +1,3 @@
-# pylint: disable=missing-docstring
 """
 This module contains abstractions of formulas.
 """

@@ -1,5 +1,3 @@
-# pylint: disable=missing-docstring
-
 from logiclib.formula import (
     Formula, Predicate, Universal, Existential, Negation, Conjunction,
     Disjunction, Implication, BiImplication
