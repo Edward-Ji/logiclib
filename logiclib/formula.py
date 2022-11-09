@@ -5,7 +5,7 @@ This module contains abstractions of formulas.
 from abc import ABC, abstractmethod
 from itertools import zip_longest
 from dataclasses import dataclass
-from typing import ClassVar, Dict, List
+from typing import ClassVar, Dict, List, Set
 
 
 class Formula(ABC):
@@ -29,6 +29,10 @@ class Formula(ABC):
 
     @abstractmethod
     def same_as(self, other: "Formula", var_map: Dict[str, str] = None) -> bool:
+        pass
+
+    @abstractmethod
+    def get_free_vars(self) -> Set[str]:
         pass
 
 
@@ -57,6 +61,9 @@ class Predicate(Formula):
 
         return True
 
+    def get_free_vars(self) -> Set[str]:
+        return set(self.variables)
+
 
 @dataclass
 class Operator(Formula):
@@ -78,6 +85,10 @@ class Unary(Operator):
             return False
         return self.right.same_as(other.right, var_map)
 
+    def get_free_vars(self) -> Set[str]:
+        return self.right.get_free_vars()
+
+
 @dataclass
 class Binary(Operator):
     left: Formula
@@ -95,6 +106,9 @@ class Binary(Operator):
             return False
         return (self.left.same_as(other.left, var_map)
                 and self.right.same_as(other.right, var_map))
+
+    def get_free_vars(self) -> Set[str]:
+        return self.left.get_free_vars().union(self.right.get_free_vars())
 
 
 @dataclass
@@ -116,6 +130,9 @@ class Quantifier(Operator):
             var_map = {}
         var_map = var_map | {self.var: other.var}
         return self.right.same_as(other.right, var_map)
+
+    def get_free_vars(self) -> Set[str]:
+        return self.right.get_free_vars().difference({self.var})
 
 
 @dataclass
