@@ -49,29 +49,31 @@ predicate_element = (
 )
 universal_element = (
     (one_of(Universal.symbol + " !")
-     | one_of(r"forall \forall", as_keyword=True)).suppress()
+     | one_of(r"forall \forall", use_regex=False, as_keyword=True)).suppress()
     + var_name_element
 )
 existential_element = (
     (one_of(Existential.symbol + "?")
-     | one_of(r"exist exists \exist \exists", as_keyword=True)).suppress()
+     | one_of(r"exist exists \exist \exists",
+              use_regex=False, as_keyword=True)).suppress()
     + var_name_element
 )
 negation_element = (
     one_of(Negation.symbol + " ~")
-    | one_of(r"not \lnot", as_keyword=True)).suppress()
+    | one_of(r"not \lnot", use_regex=False, as_keyword=True)).suppress()
 conjunction_element = (
     one_of(Conjunction.symbol + " &")
-    | one_of(r"and \land", as_keyword=True)).suppress()
+    | one_of(r"and \land", use_regex=False, as_keyword=True)).suppress()
 disjunction_element = (
     one_of(Disjunction.symbol + " |")
-    | one_of(r"or \lor", as_keyword=True)).suppress()
+    | one_of(r"or \lor", use_regex=False, as_keyword=True)).suppress()
 implication_element = (
     one_of(Implication.symbol + " ->")
-    | one_of(r"implies to \implies \to", as_keyword=True)).suppress()
+    | one_of(r"implies to \implies \to",
+             use_regex=False, as_keyword=True)).suppress()
 bi_implication_element = (
     one_of(BiImplication.symbol + " <->")
-    | one_of(r"\leftrightarrow", as_keyword=True)).suppress()
+    | one_of(r"\leftrightarrow", use_regex=False, as_keyword=True)).suppress()
 formula_element = infix_notation(
     predicate_element.add_parse_action(predicate_action),
     [
