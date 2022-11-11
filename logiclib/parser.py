@@ -40,41 +40,55 @@ def existential_action(toks: List[str]) -> Existential:
     return Existential(*toks[0])
 
 
-var_name_element = Word(alphas, alphanums)
-predicate_element = (
+var_name_element: ParserElement = Word(alphas, alphanums)
+
+predicate_element: ParserElement = (
     var_name_element
     + Char("(").suppress()
     + delimited_list(var_name_element)
     + Char(")").suppress()
 )
-universal_element = (
+
+universal_element: ParserElement = (
     (one_of(Universal.symbol + " !")
      | one_of(r"forall \forall", use_regex=False, as_keyword=True)).suppress()
     + var_name_element
 )
-existential_element = (
+
+existential_element: ParserElement = (
     (one_of(Existential.symbol + "?")
      | one_of(r"exist exists \exist \exists",
               use_regex=False, as_keyword=True)).suppress()
     + var_name_element
 )
-negation_element = (
+
+negation_element: ParserElement = (
     one_of(Negation.symbol + " ~")
-    | one_of(r"not \lnot", use_regex=False, as_keyword=True)).suppress()
-conjunction_element = (
+    | one_of(r"not \lnot", use_regex=False, as_keyword=True)
+).suppress()
+
+conjunction_element: ParserElement = (
     one_of(Conjunction.symbol + " &")
-    | one_of(r"and \land", use_regex=False, as_keyword=True)).suppress()
-disjunction_element = (
+    | one_of(r"and \land", use_regex=False, as_keyword=True)
+).suppress()
+
+disjunction_element: ParserElement = (
     one_of(Disjunction.symbol + " |")
-    | one_of(r"or \lor", use_regex=False, as_keyword=True)).suppress()
-implication_element = (
+    | one_of(r"or \lor", use_regex=False, as_keyword=True)
+).suppress()
+
+implication_element: ParserElement = (
     one_of(Implication.symbol + " ->")
     | one_of(r"implies to \implies \to",
-             use_regex=False, as_keyword=True)).suppress()
-bi_implication_element = (
+             use_regex=False, as_keyword=True)
+).suppress()
+
+bi_implication_element: ParserElement = (
     one_of(BiImplication.symbol + " <->")
-    | one_of(r"\leftrightarrow", use_regex=False, as_keyword=True)).suppress()
-formula_element = infix_notation(
+    | one_of(r"\leftrightarrow", use_regex=False, as_keyword=True)
+).suppress()
+
+formula_element: ParserElement = infix_notation(
     predicate_element.add_parse_action(predicate_action),
     [
         (universal_element, 1, OpAssoc.RIGHT, universal_action),
