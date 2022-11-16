@@ -37,6 +37,25 @@ class Formula(ABC):
 
 
 @dataclass
+class Proposition(Formula):
+    name: str
+
+    def __str__(self):
+        return self.name
+
+    def rename_var(self, var_map: Dict[str, str]):
+        pass
+
+    def same_as(self, other: Formula, var_map: Dict[str, str] = None) -> bool:
+        if type(other) is not type(other):
+            return False
+        return self.name == other.name
+
+    def get_free_vars(self) -> Set[str]:
+        return set()
+
+
+@dataclass
 class Predicate(Formula):
     name: str
     variables: List[str]

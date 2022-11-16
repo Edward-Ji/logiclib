@@ -8,8 +8,8 @@ from pyparsing import (
     infix_notation, one_of
 )
 from logiclib.formula import (
-    Formula, Predicate, Universal, Existential, Negation, Conjunction,
-    Disjunction, Implication, BiImplication
+    Formula, Proposition, Predicate, Universal, Existential, Negation,
+    Conjunction, Disjunction, Implication, BiImplication
 )
 
 
@@ -47,7 +47,13 @@ predicate_element: ParserElement = (
     + Char("(").suppress()
     + delimited_list(var_name_element)
     + Char(")").suppress()
+).add_parse_action(predicate_action)
+
+proposition_element: ParserElement = var_name_element.copy().add_parse_action(
+    lambda toks: Proposition(toks[0])
 )
+
+atomic_element: ParserElement = predicate_element | proposition_element
 
 universal_element: ParserElement = (
     (one_of(Universal.symbol + " !")
@@ -89,7 +95,7 @@ bi_implication_element: ParserElement = (
 ).suppress()
 
 formula_element: ParserElement = infix_notation(
-    predicate_element.add_parse_action(predicate_action),
+    atomic_element,
     [
         (universal_element, 1, OpAssoc.RIGHT, universal_action),
         (existential_element, 1, OpAssoc.RIGHT, existential_action),
