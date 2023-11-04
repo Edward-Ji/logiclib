@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "logiclib"
-version = "0.0.1post2"
+version = "0.0.1post3"
 authors = [
   { name="Edward Ji", email="jiziao6@gmail.com" },
 ]
